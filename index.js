@@ -1,36 +1,51 @@
 "use strict";
 
-const video = document.querySelector("video");
-const canvas = window.canvas = document.querySelector("canvas");
-const button = document.querySelector("button");
+class App extends preact.Component {
+  canvasElement = null;
+  videoElement = null;
+  canvasRef = (element) => {
+    this.canvasElement = element
+  };
+  videoRef = (element) => {
+    this.videoElement = element
+  };
 
-button.onclick = function() {
-  canvas.width = video.videoWidth;
-  canvas.height = video.videoHeight;
-  canvas.getContext("2d").drawImage(video, 0, 0, canvas.width, canvas.height);
+  buttonClick = () => {
+    this.canvasElement.width = this.videoElement.videoWidth;
+    this.canvasElement.height = this.videoElement.videoHeight;
+    this.canvasElement.getContext("2d").drawImage(
+      this.videoElement, 0, 0, this.canvasElement.width, this.canvasElement.height);
 
-  canvas.toBlob((blob) => {
-    const link = document.createElement("a");
-    link.text = Date.now();
-    link.href = URL.createObjectURL(blob);
-    link.target = "_blank";
-    document.body.appendChild(link);
-  }, "image/jpeg", 0.6);
-};
+    const img = document.createElement("img");
+    img.src = this.canvasElement.toDataURL('image/jpeg', 0.6);
+    img.width = 100;
+    document.body.appendChild(img);
+  };
 
-const constraints = {
-  audio: false,
-  video: {
-    facingMode: "user"
-  }
-};
+  render() {
+    return preact.h(
+      "div",
+      null,
+      preact.h("video", { autoplay: true, playsinline: true, ref: this.videoRef }),
+      preact.h("canvas", { style: "display:none", ref: this.canvasRef }),
+      preact.h("button", { onClick: this.buttonClick }, "Snap"));
+  };
 
-function handleSuccess(stream) {
-  video.srcObject = stream;
+  componentDidMount() {
+    const constraints = {
+      audio: false,
+      video: {
+        facingMode: "user"
+      }
+    };
+    navigator.mediaDevices.getUserMedia(constraints)
+      .then((stream) => {
+        this.videoElement.srcObject = stream;
+      })
+      .catch((err) => {
+        alert("getUserMedia error: " + err);
+      });
+  };
 }
 
-function handleError(error) {
-  alert("getUserMedia error: " + error);
-}
-
-navigator.mediaDevices.getUserMedia(constraints).then(handleSuccess).catch(handleError);
+preact.render(preact.h(App), document.body);
