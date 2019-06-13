@@ -1,20 +1,19 @@
 "use strict";
 
 class App extends preact.Component {
-  canvasElement = null;
-  videoElement = null;
-  canvasRef = (element) => {
+  canvasRef(element) {
     this.canvasElement = element
   };
-  videoRef = (element) => {
+  videoRef(element) {
     this.videoElement = element
   };
 
-  buttonClick = () => {
-    this.canvasElement.width = this.videoElement.videoWidth;
-    this.canvasElement.height = this.videoElement.videoHeight;
-    this.canvasElement.getContext("2d").drawImage(
-      this.videoElement, 0, 0, this.canvasElement.width, this.canvasElement.height);
+  buttonClick() {
+    const videoWidth = this.videoElement.videoWidth;
+    const videoHeight = this.videoElement.videoHeight;
+    this.canvasElement.width = videoWidth;
+    this.canvasElement.height = videoHeight;
+    this.canvasElement.getContext("2d").drawImage(this.videoElement, 0, 0, videoWidth, videoHeight);
 
     const img = document.createElement("img");
     img.src = this.canvasElement.toDataURL('image/jpeg', 0.6);
@@ -26,9 +25,9 @@ class App extends preact.Component {
     return preact.h(
       "div",
       null,
-      preact.h("video", { autoplay: true, playsinline: true, ref: this.videoRef }),
-      preact.h("canvas", { style: "display:none", ref: this.canvasRef }),
-      preact.h("button", { onClick: this.buttonClick }, "Snap"));
+      preact.h("video", { autoplay: true, playsinline: true, ref: (e) => this.videoRef(e) }),
+      preact.h("canvas", { style: "display:none", ref: (e) => this.canvasRef(e) }),
+      preact.h("button", { onClick: () => this.buttonClick() }, "Snap"));
   };
 
   componentDidMount() {
