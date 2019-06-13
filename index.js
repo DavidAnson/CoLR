@@ -1,9 +1,19 @@
 "use strict";
 
 class App extends preact.Component {
+  constructor() {
+    super();
+    this.canvasElement = null;
+    this.videoElement = null;
+    this.state = {
+      pictures: []
+    }
+  }
+
   canvasRef(element) {
     this.canvasElement = element
   };
+
   videoRef(element) {
     this.videoElement = element
   };
@@ -15,19 +25,22 @@ class App extends preact.Component {
     this.canvasElement.height = videoHeight;
     this.canvasElement.getContext("2d").drawImage(this.videoElement, 0, 0, videoWidth, videoHeight);
 
-    const img = document.createElement("img");
-    img.src = this.canvasElement.toDataURL('image/jpeg', 0.6);
-    img.width = 100;
-    document.body.appendChild(img);
+    const pictures = this.state.pictures;
+    pictures.push(this.canvasElement.toDataURL("image/jpeg", 0.6));
+    this.setState({ pictures });
   };
 
-  render() {
+  render(props, state) {
+    const pictureElements = state.pictures.map((picture) => {
+      return preact.h("img", { src: picture, width: 100 });
+    });
     return preact.h(
       "div",
       null,
       preact.h("video", { autoplay: true, playsinline: true, ref: (e) => this.videoRef(e) }),
       preact.h("canvas", { style: "display:none", ref: (e) => this.canvasRef(e) }),
-      preact.h("button", { onClick: () => this.buttonClick() }, "Snap"));
+      preact.h("button", { onClick: () => this.buttonClick() }, "Snap"),
+      ...pictureElements);
   };
 
   componentDidMount() {
