@@ -35,21 +35,38 @@ class App extends preact.Component {
   };
 
   render(props, state) {
-    const pictureElements = state.pictures.map((picture) => {
+    const thumbs = state.pictures.map((picture) => {
       return preact.h(
         "li",
         null,
-        preact.h("img", { src: picture.thumb }),
-        preact.h("img", { src: picture.image }));
+        preact.h("img", { src: picture.thumb }));
     });
     return preact.h(
       "div",
-      null,
+      { class: "container" },
+      preact.h(
+        "div",
+        { class: "main" },
+        preact.h("video", { autoplay: true, playsinline: true, ref: (e) => this.videoElement = e })),
+      preact.h("div", { class: "divider" }),
+      preact.h(
+        "div",
+        { class: "left" },
+        ),
+      preact.h(
+        "div",
+        { class: "middle" },
+        preact.h("button", { onClick: () => this.buttonClick() }, "Snap")),
+      preact.h(
+        "div",
+        { class: "right" },
+        ),
+      preact.h(
+        "div",
+        { class: "strip" },
+        preact.h("ul", null, ...thumbs)),
       preact.h("canvas", { ref: (e) => this.canvasElement = e }),
-      preact.h("canvas", { ref: (e) => this.canvasThumbElement = e }),
-      preact.h("video", { autoplay: true, playsinline: true, ref: (e) => this.videoElement = e }),
-      preact.h("button", { onClick: () => this.buttonClick() }, "Snap"),
-      preact.h("ul", null, ...pictureElements));
+      preact.h("canvas", { ref: (e) => this.canvasThumbElement = e }));
   };
 
   componentDidMount() {

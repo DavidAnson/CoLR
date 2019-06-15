@@ -5,8 +5,61 @@
     <title>CoLR</title>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <style>
+      html, body {
+        height: 100%;
+        margin: 0;
+      }
+      video {
+        max-width: 100%;
+      }
+      button {
+        width: 100%;
+        height: 100%;
+      }
+      ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        overflow-x: scroll;
+        white-space: nowrap;
+      }
+      li {
+        display: inline;
+      }
       canvas {
         display: none;
+      }
+      .container {
+        display: grid;
+        height: 100%;
+        grid-template-areas: "main main main"
+        "divider divider divider"
+        "left middle right"
+        "strip strip strip";
+        grid-template-columns: 30% 40% 30%;
+        grid-template-rows: auto 2px 100px 100px;
+      }
+      .main {
+        grid-area: main;
+        align-self: center;
+        justify-self: center;
+      }
+      .divider {
+        grid-area: divider;
+        background-color: black;
+      }
+      .left {
+        grid-area: left;
+      }
+      .middle {
+        grid-area: middle;
+      }
+      .right {
+        grid-area: right;
+      }
+      .strip {
+        grid-area: strip;
       }
     </style>
   </head>
