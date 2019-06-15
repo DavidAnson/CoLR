@@ -10,11 +10,12 @@ class App extends preact.Component {
     this.canvasThumbElement = null;
     this.videoElement = null;
     this.state = {
-      pictures: []
+      pictures: [],
+      picture: null
     }
   }
 
-  buttonClick() {
+  snapClick() {
     const videoWidth = this.videoElement.videoWidth;
     const videoHeight = this.videoElement.videoHeight;
     [
@@ -34,12 +35,20 @@ class App extends preact.Component {
     this.setState({ pictures });
   };
 
+  thumbClick(picture) {
+    this.setState({ picture });
+  }
+
+  backClick() {
+    this.setState({ picture: null });
+  }
+
   render(props, state) {
     const thumbs = state.pictures.map((picture) => {
       return preact.h(
         "li",
         null,
-        preact.h("img", { src: picture.thumb }));
+        preact.h("img", { src: picture.thumb, onClick: () => this.thumbClick(picture.image) }));
     });
     return preact.h(
       "div",
@@ -47,16 +56,17 @@ class App extends preact.Component {
       preact.h(
         "div",
         { class: "main" },
-        preact.h("video", { autoplay: true, playsinline: true, ref: (e) => this.videoElement = e })),
+        preact.h("video", { class: state.picture ? "hidden" : "", autoplay: true, playsinline: true, ref: (e) => this.videoElement = e }),
+        preact.h("img", { class: state.picture ? "" : "hidden", src: state.picture })),
       preact.h("div", { class: "divider" }),
       preact.h(
         "div",
         { class: "left" },
-        ),
+        preact.h("button", { onClick: () => this.backClick() }, "Back")),
       preact.h(
         "div",
         { class: "middle" },
-        preact.h("button", { onClick: () => this.buttonClick() }, "Snap")),
+        preact.h("button", { onClick: () => this.snapClick() }, "Snap")),
       preact.h(
         "div",
         { class: "right" },
@@ -65,15 +75,15 @@ class App extends preact.Component {
         "div",
         { class: "strip" },
         preact.h("ul", null, ...thumbs)),
-      preact.h("canvas", { ref: (e) => this.canvasElement = e }),
-      preact.h("canvas", { ref: (e) => this.canvasThumbElement = e }));
+      preact.h("canvas", { class: "hidden", ref: (e) => this.canvasElement = e }),
+      preact.h("canvas", { class: "hidden", ref: (e) => this.canvasThumbElement = e }));
   };
 
   componentDidMount() {
     const constraints = {
       audio: false,
       video: {
-        facingMode: "user"
+        facingMode: "environment"
       }
     };
     navigator.mediaDevices.getUserMedia(constraints)
