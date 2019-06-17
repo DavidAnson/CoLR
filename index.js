@@ -20,11 +20,11 @@ class App extends preact.Component {
     const videoHeight = this.videoElement.videoHeight;
     [
       [ this.canvasElement, 1 ],
-      [ this.canvasThumbElement, 10 ]
+      [ this.canvasThumbElement, 100 / videoHeight ]
     ].forEach((canvas) => {
       const [ element, scale ] = canvas;
-      element.width = videoWidth / scale;
-      element.height = videoHeight / scale;
+      element.width = videoWidth * scale;
+      element.height = videoHeight * scale;
       element.getContext("2d").drawImage( this.videoElement, 0, 0, element.width, element.height);
     });
     const pictures = this.state.pictures;
@@ -58,7 +58,6 @@ class App extends preact.Component {
         { class: "main" },
         preact.h("video", { class: state.picture ? "hidden" : "", autoplay: true, playsinline: true, ref: (e) => this.videoElement = e }),
         preact.h("img", { class: state.picture ? "" : "hidden", src: state.picture })),
-      preact.h("div", { class: "divider" }),
       preact.h(
         "div",
         { class: "left" },
@@ -70,7 +69,7 @@ class App extends preact.Component {
       preact.h(
         "div",
         { class: "right" },
-        ),
+        `${(this.videoElement || {}).videoWidth} x ${(this.videoElement || {}).videoHeight}`),
       preact.h(
         "div",
         { class: "strip" },
@@ -83,6 +82,8 @@ class App extends preact.Component {
     const constraints = {
       audio: false,
       video: {
+        width: { ideal: 5000 },
+        height: { ideal: 5000 },
         facingMode: "environment"
       }
     };

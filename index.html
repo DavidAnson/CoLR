@@ -3,8 +3,7 @@
   <head>
     <meta charset="utf-8"/>
     <title>CoLR</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
-    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1"/>
     <style>
       html, body {
         height: 100%;
@@ -24,30 +23,27 @@
         margin: 0;
         height: 100%;
         overflow-x: scroll;
+        overflow-y: hidden;
         white-space: nowrap;
       }
       li {
         display: inline;
+        margin-left: 2px;
       }
       .container {
         display: grid;
         height: 100%;
         grid-template-areas: "main main main"
-        "divider divider divider"
         "left middle right"
         "strip strip strip";
         grid-template-columns: 30% 40% 30%;
-        grid-template-rows: auto 2px 100px 100px;
+        grid-template-rows: auto 50px 100px;
       }
       .main {
         grid-area: main;
         display: grid;
         align-items: center;
         justify-items: center;
-      }
-      .divider {
-        grid-area: divider;
-        background-color: black;
       }
       .left {
         grid-area: left;
