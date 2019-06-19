@@ -3,11 +3,14 @@
   <head>
     <meta charset="utf-8"/>
     <title>CoLR</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
     <style>
       html, body {
         height: 100%;
         margin: 0;
+        -webkit-user-select: none;
+        -webkit-touch-callout: none;
       }
       img, video {
         max-width: 100%;
@@ -33,29 +36,34 @@
       .container {
         display: grid;
         height: 100%;
-        grid-template-areas: "main main main"
-        "left middle right"
-        "strip strip strip";
-        grid-template-columns: 30% 40% 30%;
-        grid-template-rows: auto 50px 100px;
+        grid-template-areas: "lens"
+          "divider"
+          "roll";
+        grid-template-rows: auto 2px 100px;
       }
-      .main {
-        grid-area: main;
+      .lens {
+        grid-area: lens;
         display: grid;
         align-items: center;
         justify-items: center;
       }
-      .left {
-        grid-area: left;
+      .back {
+        grid-area: lens;
+        font-family: "Segoe UI Emoji";
+        font-size: 20px;
       }
-      .middle {
-        grid-area: middle;
+      .delete {
+        grid-area: lens;
+        justify-self: flex-end;
+        font-family: "Segoe UI Emoji";
+        font-size: 20px;
       }
-      .right {
-        grid-area: right;
+      .divider {
+        grid-area: divider;
+        background-color: black;
       }
-      .strip {
-        grid-area: strip;
+      .roll {
+        grid-area: roll;
       }
       .hidden {
         display: none;

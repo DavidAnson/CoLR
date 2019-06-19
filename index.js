@@ -15,7 +15,7 @@ class App extends preact.Component {
     }
   }
 
-  snapClick() {
+  shutterClick() {
     const videoWidth = this.videoElement.videoWidth;
     const videoHeight = this.videoElement.videoHeight;
     [
@@ -43,6 +43,22 @@ class App extends preact.Component {
     this.setState({ picture: null });
   }
 
+  deleteClick() {
+    const picture = this.state.picture;
+    let index = -1;
+    const pictures = this.state.pictures.filter((p, i) => {
+      if (p.image === picture) {
+        index = i;
+        return false;
+      }
+      return true;
+    });
+    this.setState({
+      pictures,
+      picture: (pictures[index] || pictures[index - 1] || {}).image
+    });
+  }
+
   render(props, state) {
     const thumbs = state.pictures.map((picture) => {
       return preact.h(
@@ -50,29 +66,29 @@ class App extends preact.Component {
         null,
         preact.h("img", { src: picture.thumb, onClick: () => this.thumbClick(picture.image) }));
     });
+    const live = !state.picture;
     return preact.h(
       "div",
       { class: "container" },
       preact.h(
         "div",
-        { class: "main" },
-        preact.h("video", { class: state.picture ? "hidden" : "", autoplay: true, playsinline: true, ref: (e) => this.videoElement = e }),
-        preact.h("img", { class: state.picture ? "" : "hidden", src: state.picture })),
+        { class: "lens", onClick: () => this.shutterClick() },
+        preact.h("video", { class: live ? "" : "hidden", autoplay: true, playsinline: true, ref: (e) => this.videoElement = e }),
+        preact.h("img", { class: live ? "hidden" : "", src: state.picture })),
       preact.h(
         "div",
-        { class: "left" },
-        preact.h("button", { onClick: () => this.backClick() }, "Back")),
+        { class: "back" + (live ? " hidden" : ""), onClick: () => this.backClick() },
+        "📷"),
       preact.h(
         "div",
-        { class: "middle" },
-        preact.h("button", { onClick: () => this.snapClick() }, "Snap")),
+        { class: "delete" + (live ? " hidden" : ""), onClick: () => this.deleteClick() },
+        "🗑"),
       preact.h(
         "div",
-        { class: "right" },
-        `${(this.videoElement || {}).videoWidth} x ${(this.videoElement || {}).videoHeight}`),
+        { class: "divider" }),
       preact.h(
         "div",
-        { class: "strip" },
+        { class: "roll" },
         preact.h("ul", null, ...thumbs)),
       preact.h("canvas", { class: "hidden", ref: (e) => this.canvasElement = e }),
       preact.h("canvas", { class: "hidden", ref: (e) => this.canvasThumbElement = e }));
