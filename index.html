@@ -49,12 +49,17 @@
       }
       .back {
         grid-area: lens;
+        align-self: flex-end;
+        justify-self: flex-start;
+        background-color: rgba(255, 255, 255, 0.8);
         font-family: "Segoe UI Emoji";
         font-size: 20px;
       }
       .delete {
         grid-area: lens;
+        align-self: flex-end;
         justify-self: flex-end;
+        background-color: rgba(255, 255, 255, 0.8);
         font-family: "Segoe UI Emoji";
         font-size: 20px;
       }
@@ -67,6 +72,12 @@
       }
       .hidden {
         display: none;
+      }
+      .ghosted {
+        display: contents;
+      }
+      .selected {
+        opacity: 0.7;
       }
     </style>
   </head>

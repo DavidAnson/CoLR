@@ -61,10 +61,11 @@ class App extends preact.Component {
 
   render(props, state) {
     const thumbs = state.pictures.map((picture) => {
+      const selected = (picture.image === state.picture);
       return preact.h(
         "li",
         null,
-        preact.h("img", { src: picture.thumb, onClick: () => this.thumbClick(picture.image) }));
+        preact.h("img", { class: selected ? "selected" : "", src: picture.thumb, onClick: () => this.thumbClick(picture.image) }));
     });
     const live = !state.picture;
     return preact.h(
@@ -73,7 +74,7 @@ class App extends preact.Component {
       preact.h(
         "div",
         { class: "lens", onClick: () => this.shutterClick() },
-        preact.h("video", { class: live ? "" : "hidden", autoplay: true, playsinline: true, ref: (e) => this.videoElement = e }),
+        preact.h("video", { class: live ? "" : "ghosted", autoplay: true, playsinline: true, ref: (e) => this.videoElement = e }),
         preact.h("img", { class: live ? "hidden" : "", src: state.picture })),
       preact.h(
         "div",
