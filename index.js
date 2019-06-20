@@ -60,13 +60,27 @@ class App extends preact.Component {
   }
 
   render(props, state) {
-    const thumbs = state.pictures.map((picture) => {
-      const selected = (picture.image === state.picture);
-      return preact.h(
-        "li",
-        null,
-        preact.h("img", { class: selected ? "selected" : "", src: picture.thumb, onClick: () => this.thumbClick(picture.image) }));
-    });
+    const roll = state.pictures.length ?
+      preact.h(
+        "div",
+        { class: "roll" },
+        preact.h(
+          "ul",
+          null,
+          state.pictures.map((p) => {
+            const selected = (p.image === state.picture);
+            return preact.h(
+              "li",
+              null,
+              preact.h("img", { class: selected ? "selected" : "", src: p.thumb, onClick: () => this.thumbClick(p.image) }));
+          }))) :
+      preact.h(
+        "div",
+        { class: "roll credits" },
+        preact.h(
+          "a",
+          { href: "https://github.com/DavidAnson", target: "_blank" },
+          "CoLR"));
     const live = !state.picture;
     return preact.h(
       "div",
@@ -87,10 +101,7 @@ class App extends preact.Component {
       preact.h(
         "div",
         { class: "divider" }),
-      preact.h(
-        "div",
-        { class: "roll" },
-        preact.h("ul", null, ...thumbs)),
+      roll,
       preact.h("canvas", { class: "hidden", ref: (e) => this.canvasElement = e }),
       preact.h("canvas", { class: "hidden", ref: (e) => this.canvasThumbElement = e }));
   };
