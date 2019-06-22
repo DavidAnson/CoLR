@@ -44,8 +44,19 @@
       .lens {
         grid-area: lens;
         display: grid;
+        grid-template-areas: "content";
         align-items: center;
         justify-items: center;
+      }
+      .lens video, .lens img {
+        grid-area: content;
+      }
+      .minimized {
+        max-width: 75px;
+        max-height: 75px;
+        align-self: flex-end;
+        justify-self: center;
+        margin-bottom: 2px;
       }
       .back {
         grid-area: lens;
@@ -53,7 +64,7 @@
         justify-self: flex-start;
         background-color: rgba(255, 255, 255, 0.8);
         font-family: "Segoe UI Emoji";
-        font-size: 20px;
+        font-size: 40px;
       }
       .delete {
         grid-area: lens;
@@ -61,20 +72,17 @@
         justify-self: flex-end;
         background-color: rgba(255, 255, 255, 0.8);
         font-family: "Segoe UI Emoji";
-        font-size: 20px;
+        font-size: 40px;
       }
       .divider {
         grid-area: divider;
-        background-color: black;
+        background-color: gray;
       }
       .roll {
         grid-area: roll;
       }
       .hidden {
         display: none;
-      }
-      .ghosted {
-        display: contents;
       }
       .selected {
         opacity: 0.7;

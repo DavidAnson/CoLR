@@ -88,12 +88,12 @@ class App extends preact.Component {
       preact.h(
         "div",
         { class: "lens", onClick: () => this.shutterClick() },
-        preact.h("video", { class: live ? "" : "ghosted", autoplay: true, playsinline: true, ref: (e) => this.videoElement = e }),
-        preact.h("img", { class: live ? "hidden" : "", src: state.picture })),
+        preact.h("img", { class: live ? "hidden" : "", src: state.picture }),
+        preact.h("video", { class: live ? "" : "minimized", autoplay: true, playsinline: true, ref: (e) => this.videoElement = e })),
       preact.h(
         "div",
         { class: "back" + (live ? " hidden" : ""), onClick: () => this.backClick() },
-        "📷"),
+        "🔙"),
       preact.h(
         "div",
         { class: "delete" + (live ? " hidden" : ""), onClick: () => this.deleteClick() },
