@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+  <style>
+    rect, line {
+      stroke: white;
+      stroke-width: 0.55;
+      fill: none;
+    }
+  </style>
+
+  <polygon points="0 16 5 0 0 0" fill="red"/>
+  <polygon points="0 16 10 0 5 0" fill="orange"/>
+  <polygon points="0 16 16 0 10 0" fill="yellow"/>
+  <polygon points="0 16 16 6 16 0" fill="green"/>
+  <polygon points="0 16 16 11 16 6" fill="blue"/>
+  <polygon points="0 16 16 16 16 11" fill="purple"/>
+
+  <rect x="0.25" y="0.25" width="15.5" height="15.5"/>
+
+  <line x1="0" y1="16" x2="5" y2="0"/>
+  <line x1="0" y1="16" x2="10" y2="0"/>
+  <line x1="0" y1="16" x2="16" y2="0"/>
+  <line x1="0" y1="16" x2="16" y2="6"/>
+  <line x1="0" y1="16" x2="16" y2="11"/>
+</svg>

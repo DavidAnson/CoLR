@@ -80,7 +80,7 @@ class App extends preact.Component {
         preact.h(
           "a",
           { href: "https://github.com/DavidAnson", target: "_blank" },
-          "CoLR"));
+          "Camera of Last Resort"));
     const live = !state.picture;
     return preact.h(
       "div",
@@ -92,11 +92,11 @@ class App extends preact.Component {
         preact.h("video", { class: live ? "" : "minimized", autoplay: true, playsinline: true, ref: (e) => this.videoElement = e })),
       preact.h(
         "div",
-        { class: "back" + (live ? " hidden" : ""), onClick: () => this.backClick() },
+        { class: "icon back" + (live ? " hidden" : ""), onClick: () => this.backClick() },
         "🔙"),
       preact.h(
         "div",
-        { class: "delete" + (live ? " hidden" : ""), onClick: () => this.deleteClick() },
+        { class: "icon delete" + (live ? " hidden" : ""), onClick: () => this.deleteClick() },
         "🗑"),
       preact.h(
         "div",
