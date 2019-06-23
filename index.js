@@ -2,6 +2,7 @@
 
 const jpegMimeType = "image/jpeg";
 const jpegQuality = 0.8;
+const dbName = "CoLR";
 const debugMode = (window.location.hash === "#debug");
 
 class App extends preact.Component {
@@ -14,6 +15,13 @@ class App extends preact.Component {
       pictures: [],
       picture: null
     }
+    this.db = new Dexie(dbName);
+    this.db.version(1).stores({
+        pictures: "++id,image"
+    });
+    this.db.pictures.orderBy(":id").toArray().then((pictures) => {
+      this.setState({ pictures });
+    }).catch((err) => alert("db read error: " + err));
   }
 
   shutterClick() {
@@ -28,12 +36,14 @@ class App extends preact.Component {
       element.height = videoHeight * scale;
       element.getContext("2d").drawImage( this.videoElement, 0, 0, element.width, element.height);
     });
-    const pictures = this.state.pictures;
-    pictures.push({
+    const picture = {
       image: this.canvasElement.toDataURL(jpegMimeType, jpegQuality),
       thumb: this.canvasThumbElement.toDataURL(jpegMimeType, jpegQuality),
-    });
+    };
+    const pictures = this.state.pictures;
+    pictures.push(picture);
     this.setState({ pictures });
+    this.db.pictures.put(picture).catch((err) => alert("db.put error: " + err));
   };
 
   thumbClick(picture) {
@@ -58,6 +68,7 @@ class App extends preact.Component {
       pictures,
       picture: (pictures[index] || pictures[index - 1] || {}).image
     });
+    this.db.pictures.where("image").equals(picture).delete().catch((err) => alert("db.delete error: " + err));
   }
 
   render(props, state) {
@@ -138,7 +149,25 @@ class App extends preact.Component {
       null,
       preact.h("pre", null, window.navigator.userAgent),
       preact.h("p", null, preact.h("video", { class: "minimized", autoplay: true, playsinline: true, ref: (e) => this.videoElement = e })),
-      preact.h("pre", null, JSON.stringify(state.videoSettings, null, "  ")));
+      preact.h("pre", null, JSON.stringify(state.videoSettings, null, "  ")),
+      (state.pictures || []).map((picture) => {
+        return preact.h(
+          "p",
+          null,
+          preact.h(
+            "a",
+            { href: picture.image, target: "_blank" },
+            preact.h(
+              "img",
+              { src: picture.thumb })));
+      }),
+      preact.h(
+        "p",
+        null,
+        preact.h(
+          "button",
+          { onclick: () => Dexie.delete(dbName).catch((err) => alert("Dexie.delete error: " + err)) },
+          "Delete database")));
   }
 }
 
