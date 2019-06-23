@@ -13,7 +13,7 @@ class App extends preact.Component {
     this.videoElement = null;
     this.state = {
       pictures: [],
-      picture: null
+      image: null
     }
     this.db = new Dexie(dbName);
     this.db.version(1).stores({
@@ -46,19 +46,19 @@ class App extends preact.Component {
     this.db.pictures.put(picture).catch((err) => alert("db.put error: " + err));
   };
 
-  thumbClick(picture) {
-    this.setState({ picture });
+  thumbClick(image) {
+    this.setState({ image });
   }
 
   backClick() {
-    this.setState({ picture: null });
+    this.setState({ image: null });
   }
 
   deleteClick() {
-    const picture = this.state.picture;
+    const image = this.state.image;
     let index = -1;
     const pictures = this.state.pictures.filter((p, i) => {
-      if (p.image === picture) {
+      if (p.image === image) {
         index = i;
         return false;
       }
@@ -66,9 +66,9 @@ class App extends preact.Component {
     });
     this.setState({
       pictures,
-      picture: (pictures[index] || pictures[index - 1] || {}).image
+      image: (pictures[index] || pictures[index - 1] || {}).image
     });
-    this.db.pictures.where("image").equals(picture).delete().catch((err) => alert("db.delete error: " + err));
+    this.db.pictures.where("image").equals(image).delete().catch((err) => alert("db.delete error: " + err));
   }
 
   render(props, state) {
@@ -83,7 +83,7 @@ class App extends preact.Component {
           "ul",
           null,
           state.pictures.map((p) => {
-            const selected = (p.image === state.picture);
+            const selected = (p.image === state.image);
             return preact.h(
               "li",
               null,
@@ -96,14 +96,14 @@ class App extends preact.Component {
           "a",
           { href: "https://github.com/DavidAnson", target: "_blank" },
           "Camera of Last Resort"));
-    const live = !state.picture;
+    const live = !state.image;
     return preact.h(
       "div",
       { class: "container" },
       preact.h(
         "div",
         { class: "lens", onClick: () => this.shutterClick() },
-        preact.h("img", { class: live ? "hidden" : "", src: state.picture }),
+        preact.h("img", { class: live ? "hidden" : "", src: state.image }),
         preact.h("video", { class: live ? "" : "minimized", autoplay: true, playsinline: true, ref: (e) => this.videoElement = e })),
       preact.h(
         "div",
