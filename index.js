@@ -2,6 +2,7 @@
 
 const jpegMimeType = "image/jpeg";
 const jpegQuality = 0.8;
+const debugMode = (window.location.hash === "#debug");
 
 class App extends preact.Component {
   constructor() {
@@ -60,6 +61,9 @@ class App extends preact.Component {
   }
 
   render(props, state) {
+    if (debugMode) {
+      return this.renderDebug(props, state);
+    }
     const roll = state.pictures.length ?
       preact.h(
         "div",
@@ -118,11 +122,24 @@ class App extends preact.Component {
     navigator.mediaDevices.getUserMedia(constraints)
       .then((stream) => {
         this.videoElement.srcObject = stream;
+        if (debugMode) {
+          const videoSettings = stream.getVideoTracks()[0].getSettings();
+          this.setState({ videoSettings });
+        }
       })
       .catch((err) => {
         alert("getUserMedia error: " + err);
       });
   };
+
+  renderDebug(props, state) {
+    return preact.h(
+      "div",
+      null,
+      preact.h("pre", null, window.navigator.userAgent),
+      preact.h("p", null, preact.h("video", { class: "minimized", autoplay: true, playsinline: true, ref: (e) => this.videoElement = e })),
+      preact.h("pre", null, JSON.stringify(state.videoSettings, null, "  ")));
+  }
 }
 
 preact.render(preact.h(App), document.body);
