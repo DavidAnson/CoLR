@@ -14,10 +14,10 @@ class App extends preact.Component {
     this.state = {
       pictures: [],
       image: null
-    }
+    };
     this.db = new Dexie(dbName);
     this.db.version(1).stores({
-        pictures: "++id,image"
+      pictures: "++id,image"
     });
     this.db.pictures.orderBy(":id").toArray().then((pictures) => {
       this.setState({ pictures });
@@ -44,7 +44,7 @@ class App extends preact.Component {
     pictures.push(picture);
     this.setState({ pictures });
     this.db.pictures.put(picture).catch((err) => alert("db.put error: " + err));
-  };
+  }
 
   thumbClick(image) {
     this.setState({ image });
@@ -93,25 +93,39 @@ class App extends preact.Component {
         "div",
         { class: "roll credits" },
         preact.h(
+          "img",
+          { class: "icon", src: "CoLR.svg" }),
+        preact.h(
           "a",
           { href: "https://github.com/DavidAnson", target: "_blank" },
           "Camera of Last Resort"));
     const live = !state.image;
+    const lensClick = () => {
+      if (live) {
+        this.shutterClick();
+      }
+    };
+    const videoClick = (e) => {
+      if (!live) {
+        this.backClick();
+        e.stopPropagation();
+      }
+    };
     return preact.h(
       "div",
       { class: "container" },
       preact.h(
         "div",
-        { class: "lens", onClick: () => this.shutterClick() },
-        preact.h("img", { class: live ? "hidden" : "", src: state.image }),
-        preact.h("video", { class: live ? "" : "minimized", autoplay: true, playsinline: true, ref: (e) => this.videoElement = e })),
+        { class: "lens", onClick: lensClick },
+        preact.h(
+          "img",
+          { class: live ? "hidden" : "", src: state.image }),
+        preact.h(
+          "video",
+          { class: live ? "" : "minimized", autoplay: true, playsinline: true, onClick: videoClick, ref: (e) => this.videoElement = e })),
       preact.h(
         "div",
-        { class: "icon back" + (live ? " hidden" : ""), onClick: () => this.backClick() },
-        "🔙"),
-      preact.h(
-        "div",
-        { class: "icon delete" + (live ? " hidden" : ""), onClick: () => this.deleteClick() },
+        { class: "delete" + (live ? " hidden" : ""), onClick: () => this.deleteClick() },
         "🗑"),
       preact.h(
         "div",
@@ -119,7 +133,7 @@ class App extends preact.Component {
       roll,
       preact.h("canvas", { class: "hidden", ref: (e) => this.canvasElement = e }),
       preact.h("canvas", { class: "hidden", ref: (e) => this.canvasThumbElement = e }));
-  };
+  }
 
   componentDidMount() {
     const constraints = {
@@ -141,7 +155,7 @@ class App extends preact.Component {
       .catch((err) => {
         alert("getUserMedia error: " + err);
       });
-  };
+  }
 
   renderDebug(props, state) {
     return preact.h(
@@ -166,7 +180,7 @@ class App extends preact.Component {
         null,
         preact.h(
           "button",
-          { onclick: () => Dexie.delete(dbName).catch((err) => alert("Dexie.delete error: " + err)) },
+          { onClick: () => Dexie.delete(dbName).catch((err) => alert("Dexie.delete error: " + err)) },
           "Delete database")));
   }
 }

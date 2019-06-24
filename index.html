@@ -56,22 +56,17 @@
         max-width: 75px;
         max-height: 75px;
         align-self: flex-end;
-        justify-self: center;
-        margin-bottom: 2px;
+        justify-self: flex-start;
+        margin: 4px;
       }
-      .icon {
+      .delete {
         grid-area: lens;
         align-self: flex-end;
+        justify-self: flex-end;
         background-color: rgba(255, 255, 255, 0.8);
         font-family: "Segoe UI Emoji";
         font-size: 40px;
         padding: 2px;
-      }
-      .back {
-        justify-self: flex-start;
-      }
-      .delete {
-        justify-self: flex-end;
       }
       .divider {
         grid-area: divider;
@@ -91,6 +86,13 @@
         justify-self: center;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         font-weight: bold;
+        font-size: 20px;
+      }
+      .icon {
+        width: 25px;
+        height: 25px;
+        vertical-align: middle;
+        margin-right: 5px;
       }
     </style>
   </head>
