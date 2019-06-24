@@ -6,7 +6,7 @@ const dbName = "CoLR";
 const debugMode = (window.location.hash === "#debug");
 
 class App extends preact.Component {
-  constructor() {
+  constructor () {
     super();
     this.canvasElement = null;
     this.canvasThumbElement = null;
@@ -24,9 +24,8 @@ class App extends preact.Component {
     }).catch((err) => alert("db read error: " + err));
   }
 
-  shutterClick() {
-    const videoWidth = this.videoElement.videoWidth;
-    const videoHeight = this.videoElement.videoHeight;
+  shutterClick () {
+    const { videoWidth, videoHeight } = this.videoElement;
     [
       [ this.canvasElement, 1 ],
       [ this.canvasThumbElement, 100 / videoHeight ]
@@ -34,28 +33,28 @@ class App extends preact.Component {
       const [ element, scale ] = canvas;
       element.width = videoWidth * scale;
       element.height = videoHeight * scale;
-      element.getContext("2d").drawImage( this.videoElement, 0, 0, element.width, element.height);
+      element.getContext("2d").drawImage(this.videoElement, 0, 0, element.width, element.height);
     });
     const picture = {
       image: this.canvasElement.toDataURL(jpegMimeType, jpegQuality),
-      thumb: this.canvasThumbElement.toDataURL(jpegMimeType, jpegQuality),
+      thumb: this.canvasThumbElement.toDataURL(jpegMimeType, jpegQuality)
     };
-    const pictures = this.state.pictures;
+    const { pictures } = this.state;
     pictures.push(picture);
     this.setState({ pictures });
     this.db.pictures.put(picture).catch((err) => alert("db.put error: " + err));
   }
 
-  thumbClick(image) {
+  thumbClick (image) {
     this.setState({ image });
   }
 
-  backClick() {
+  backClick () {
     this.setState({ image: null });
   }
 
-  deleteClick() {
-    const image = this.state.image;
+  deleteClick () {
+    const { image } = this.state;
     let index = -1;
     const pictures = this.state.pictures.filter((p, i) => {
       if (p.image === image) {
@@ -71,7 +70,7 @@ class App extends preact.Component {
     this.db.pictures.where("image").equals(image).delete().catch((err) => alert("db.delete error: " + err));
   }
 
-  render(props, state) {
+  render (props, state) {
     if (debugMode) {
       return this.renderDebug(props, state);
     }
@@ -135,8 +134,8 @@ class App extends preact.Component {
       preact.h("canvas", { class: "hidden", ref: (e) => this.canvasThumbElement = e }));
   }
 
-  componentDidMount() {
-    const constraints = {
+  componentDidMount () {
+    const idealConstraints = {
       audio: false,
       video: {
         width: { ideal: 5000 },
@@ -144,7 +143,12 @@ class App extends preact.Component {
         facingMode: "environment"
       }
     };
-    navigator.mediaDevices.getUserMedia(constraints)
+    const fallbackConstraints = {
+      audio: false,
+      video: true
+    };
+    navigator.mediaDevices.getUserMedia(idealConstraints)
+      .catch(() => navigator.mediaDevices.getUserMedia(fallbackConstraints))
       .then((stream) => {
         this.videoElement.srcObject = stream;
         if (debugMode) {
@@ -157,15 +161,15 @@ class App extends preact.Component {
       });
   }
 
-  renderDebug(props, state) {
+  renderDebug (props, state) {
     return preact.h(
       "div",
       null,
       preact.h("pre", null, window.navigator.userAgent),
       preact.h("p", null, preact.h("video", { class: "minimized", autoplay: true, playsinline: true, ref: (e) => this.videoElement = e })),
       preact.h("pre", null, JSON.stringify(state.videoSettings, null, "  ")),
-      (state.pictures || []).map((picture) => {
-        return preact.h(
+      (state.pictures || []).map((picture) =>
+        preact.h(
           "p",
           null,
           preact.h(
@@ -173,8 +177,7 @@ class App extends preact.Component {
             { href: picture.image, target: "_blank" },
             preact.h(
               "img",
-              { src: picture.thumb })));
-      }),
+              { src: picture.thumb })))),
       preact.h(
         "p",
         null,
