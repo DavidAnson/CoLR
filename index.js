@@ -125,7 +125,7 @@ class App extends preact.Component {
       preact.h(
         "div",
         { class: "delete" + (live ? " hidden" : ""), onClick: () => this.deleteClick() },
-        "🗑"),
+        "✗"),
       preact.h(
         "div",
         { class: "divider" }),
