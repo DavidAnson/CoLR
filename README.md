@@ -51,14 +51,14 @@ To learn more about the following technologies and get experience using them:
 - The article [Taking still photos with WebRTC](https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API/Taking_still_photos) covers the all the basics.
   I'd read it a long time back, forgot about it for this project, then rediscovered it for this write-up.
 - The [WebRTC samples page](https://webrtc.github.io/samples/) has lots of examples and complete code for each of them.
-- The [GitHub repository for this project](https://github.com/DavidAnson) may also be of interest.
+- The [GitHub repository for this project](https://github.com/DavidAnson/CoLR) may also be of interest.
 
 ## Why are some photos blurry?
 
 The most likely culprit is (too long) shutter speed.
 Grabbing a frame from a video is not the same as taking a single photo (and post-processing it).
 A good explanation seems to be the second answer in the post [Can I get high resolution photo from video?](https://photo.stackexchange.com/questions/7872/can-i-get-high-resolution-photo-from-video).
-If you want to do better, maybe start with [Generating Sharp Panoramas from Motion-blurred Videos](https://neelj.com/projects/sharppanoramas/) or [Video Snapshots: Creating High-Quality Images from Video Clips](http://www.eecs.harvard.edu/~kalyans/research/snapshots/VideoSnapshots_TVCG12.pdf)).
+If you want to do better, maybe start with [Generating Sharp Panoramas from Motion-blurred Videos](https://neelj.com/projects/sharppanoramas/) or [Video Snapshots: Creating High-Quality Images from Video Clips](https://www.eecs.harvard.edu/~kalyans/research/snapshots/VideoSnapshots_TVCG12.pdf)).
 *Shout out to Professor Huttenlocher!*
 
 ## Why not use blobs?

@@ -96,7 +96,7 @@ class App extends preact.Component {
           { class: "icon", src: "CoLR.svg" }),
         preact.h(
           "a",
-          { href: "https://github.com/DavidAnson", target: "_blank" },
+          { href: "https://github.com/DavidAnson/CoLR", target: "_blank" },
           "Camera of Last Resort"));
     const live = !state.image;
     const lensClick = () => {
@@ -156,9 +156,7 @@ class App extends preact.Component {
           this.setState({ videoSettings });
         }
       })
-      .catch((err) => {
-        alert("getUserMedia error: " + err);
-      });
+      .catch((err) => alert("getUserMedia error: " + err));
   }
 
   renderDebug (props, state) {
